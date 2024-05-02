@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'home_page.dart';
 import 'time_page.dart';
 import 'geolocation_page.dart';
+import 'calendar_page.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -74,7 +76,7 @@ class _MainPageStructureState extends State<MainPageStructure> {
           const HomePage(),
           const TimePage(),
           const GeolocationPage(), // Geolocation module
-          const Placeholder(), // Calendar module
+          const CalendarPage(), // Calendar module
         ][currentPageIndex],// const MainPageStructure(title: 'The IntellAgent app !'),
       );
   }
