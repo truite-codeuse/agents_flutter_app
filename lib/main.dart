@@ -4,6 +4,7 @@ import 'home_page.dart';
 import 'time_page.dart';
 import 'geolocation_page.dart';
 import 'calendar_page.dart';
+import 'add_fact_page.dart';
 
 
 void main() {
@@ -62,6 +63,10 @@ class _MainPageStructureState extends State<MainPageStructure> {
               icon: Icon(Icons.calendar_month),
               label: 'Calendar',
             ),
+            NavigationDestination(
+              icon: Icon(Icons.add),
+              label: 'Add Fact',
+            ),
           ],
           selectedIndex: currentPageIndex,
           onDestinationSelected: (int index) {
@@ -74,9 +79,10 @@ class _MainPageStructureState extends State<MainPageStructure> {
         ),
         body: [
           const HomePage(),
-          const TimePage(),
+          TimePage(),
           const GeolocationPage(), // Geolocation module
           const CalendarPage(), // Calendar module
+          //AddFactPage(),
         ][currentPageIndex],// const MainPageStructure(title: 'The IntellAgent app !'),
       );
   }
