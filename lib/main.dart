@@ -1,13 +1,18 @@
+import 'package:agents_flutter_app/logic/logic.dart';
+import 'package:agents_flutter_app/pages/rules_manager_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'home_page.dart';
-import 'time_page.dart';
-import 'geolocation_page.dart';
+import 'pages/home_page.dart';
+import 'pages/time_page.dart';
+import 'pages/facts_manager_page.dart';
+import 'logic/data_handling.dart';
+
 
 void main() {
   runApp(const MyApp());
 }
 
+/// Main thread of the app
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -30,6 +35,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPageStructure extends StatefulWidget {
+  
   const MainPageStructure({super.key});
 
   @override
@@ -38,6 +44,28 @@ class MainPageStructure extends StatefulWidget {
 
 class _MainPageStructureState extends State<MainPageStructure> {
   int currentPageIndex = 0;
+  late ModuleManager manager;
+
+  _MainPageStructureState();
+
+  @override
+  void initState() {
+    // Files init and queries to Gorgias to get the rules
+    var db = DataHandler();
+    var pl = PrologHandler();
+    manager = ModuleManager();
+    db.loadFromDatabase().then((m) {
+      manager = m;
+      pl.getRules(manager).then((rules) {
+        manager.rules = rules;
+        pl.saveRules(m);
+        print('Manager loaded !');
+        print(manager.resolveAll());
+        print(manager.rules);
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +77,12 @@ class _MainPageStructureState extends State<MainPageStructure> {
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Icon(Icons.access_time),
-              label: 'Time',
+              icon: Icon(Icons.add),
+              label: 'Add Fact',
             ),
             NavigationDestination(
-              icon: Icon(Icons.gps_fixed),
-              label: 'GPS',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.calendar_month),
-              label: 'Calendar',
+              icon: Icon(Icons.add),
+              label: 'Manage Rules',
             ),
           ],
           selectedIndex: currentPageIndex,
@@ -71,11 +95,10 @@ class _MainPageStructureState extends State<MainPageStructure> {
           backgroundColor: Colors.white,
         ),
         body: [
-          const HomePage(),
-          const TimePage(),
-          const GeolocationPage(), // Geolocation module
-          const Placeholder(), // Calendar module
-        ][currentPageIndex],// const MainPageStructure(title: 'The IntellAgent app !'),
+          HomePage(manager:manager),
+          FactsManagerPage(manager: manager),
+          RulesManagerPage(manager: manager),
+        ][currentPageIndex],
       );
   }
 }

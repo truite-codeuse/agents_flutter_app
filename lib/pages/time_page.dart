@@ -1,10 +1,28 @@
 import 'dart:async';
+import 'package:agents_flutter_app/logic/logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:agents_flutter_app/logic/gorgias_api.dart';
+
+/// THIS PAGE IS NOT USED IN THE PROJECT
+/// IT WAS ONLY A TEST PAGE FOR THE TIME MODULE
 
 class TimePage extends StatelessWidget {
-  const TimePage({super.key});
+  final ModuleManager manager;
+  const TimePage({super.key, required this.manager});
+  
+
+  void gorgiasCall() {
+    final gorgias = GorgiasAPI();
+  }
+
+  void resolve() {
+    List<Fact> facts = manager.resolveAll();
+    for (Fact f in facts) {
+      print('${f.name} : ${f.state.toString()}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +35,8 @@ class TimePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
             Text(time),
+            MaterialButton(onPressed: () => gorgiasCall(), child: const Text('Press me'),),
+            MaterialButton(onPressed: () => resolve(), child: const Text('Time module'),),
         ],
       ),
     );

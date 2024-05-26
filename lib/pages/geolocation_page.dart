@@ -1,6 +1,9 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 
+/// THIS PAGE IS NOT USED IN THE PROJECT
+/// IT WAS ONLY A TEST PAGE FOR THE GPS MODULE
+
 class GeolocationPage extends StatelessWidget {
   const GeolocationPage({super.key});
 
