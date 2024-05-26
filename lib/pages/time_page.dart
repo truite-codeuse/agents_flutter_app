@@ -1,25 +1,24 @@
 import 'dart:async';
-import 'package:agents_flutter_app/logic.dart';
-import 'package:agents_flutter_app/time_module.dart';
+import 'package:agents_flutter_app/logic/logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:agents_flutter_app/gorgias_api.dart';
+import 'package:agents_flutter_app/logic/gorgias_api.dart';
+
+/// THIS PAGE IS NOT USED IN THE PROJECT
+/// IT WAS ONLY A TEST PAGE FOR THE TIME MODULE
 
 class TimePage extends StatelessWidget {
-  final DateTime after = DateTime.now().add(const Duration(minutes: 1));
-  final DateTime before = DateTime.now().subtract(const Duration(minutes: 1));
-
-  TimePage({super.key});
+  final ModuleManager manager;
+  const TimePage({super.key, required this.manager});
   
 
   void gorgiasCall() {
     final gorgias = GorgiasAPI();
-    gorgias.testGorgias();
   }
 
-  void resolve(TimeModule tm) {
-    List<Fact> facts = tm.resolve();
+  void resolve() {
+    List<Fact> facts = manager.resolveAll();
     for (Fact f in facts) {
       print('${f.name} : ${f.state.toString()}');
     }
@@ -31,20 +30,13 @@ class TimePage extends StatelessWidget {
     var time = timeState.formattedDate;
     timeState.createTimer();
 
-    TimeModule tm = TimeModule();
-    
-    Fact f1 = Fact('My First Fact');
-    Fact f2 = Fact('My Second FacT');
-    tm.addFact(f1, tm.isLessThan, [after]);
-    tm.addFact(f2, tm.isLessThan, [before]);
-
     return Center(
         child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
             Text(time),
             MaterialButton(onPressed: () => gorgiasCall(), child: const Text('Press me'),),
-            MaterialButton(onPressed: () => resolve(tm), child: const Text('Time module'),),
+            MaterialButton(onPressed: () => resolve(), child: const Text('Time module'),),
         ],
       ),
     );
